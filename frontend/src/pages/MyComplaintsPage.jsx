@@ -40,6 +40,8 @@ export const MyComplaintsPage = ({ setActiveTab, setSelectedComplaintId }) => {
       case 'Resolved':
       case 'Closed':
         return <span className="badge badge-resolved">{status}</span>;
+      case 'Assigned to Bureau':
+        return <span className="badge badge-assigned">{status}</span>;
       case 'Initial Review':
       case 'Submitted':
         return <span className="badge badge-info">{status}</span>;
@@ -107,6 +109,7 @@ export const MyComplaintsPage = ({ setActiveTab, setSelectedComplaintId }) => {
           >
             <option value="ALL">All Statuses</option>
             <option value="Submitted">Submitted</option>
+            <option value="Assigned to Bureau">Assigned to Bureau</option>
             <option value="Initial Review">Initial Review</option>
             <option value="Under Investigation">Under Investigation</option>
             <option value="Awaiting Documents">Awaiting Documents</option>
@@ -164,6 +167,13 @@ export const MyComplaintsPage = ({ setActiveTab, setSelectedComplaintId }) => {
 
                   <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.2rem' }}>
                     <strong>{c.institutionName}</strong> • {c.category}
+                  </div>
+
+                  <div style={{ fontSize: '0.775rem', color: '#4338ca', marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <span><strong>Bureau:</strong> {c.assignedBureau || 'Approval Bureau'}</span>
+                    {c.assignedOfficerName && c.assignedOfficerName !== 'Unassigned' && (
+                      <span>• <strong>Officer:</strong> {c.assignedOfficerName}</span>
+                    )}
                   </div>
 
                   {c.oneLineSummary && (

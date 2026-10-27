@@ -116,6 +116,14 @@ router.get('/:id', authenticateToken, (req, res) => {
     return res.status(403).json({ success: false, message: 'Access denied: You can only view your own complaints.' });
   }
 
+  if (role === 'OFFICER') {
+    const isAssignedToOfficer = complaint.assignedOfficerId === userId;
+    const isBureauMatch = Boolean(bureau && complaint.assignedBureau && complaint.assignedBureau.trim().toLowerCase() === bureau.trim().toLowerCase());
+    if (!isAssignedToOfficer && !isBureauMatch) {
+      return res.status(403).json({ success: false, message: 'Access denied: You can only access complaints within your bureau or assigned to you.' });
+    }
+  }
+
   // If Student, strip sensitive internal fields
   if (role === 'STUDENT') {
     const { internalNotes, officerActionLogs, relatedCandidates, ...studentSafe } = complaint;
@@ -143,6 +151,48 @@ router.get('/:id', authenticateToken, (req, res) => {
   });
 });
 
+// Configured bureaus
+const CONFIGURED_BUREAUS = [
+  'Approval Bureau',
+  'Finance & Accounts Bureau',
+  'Policy & Academic Planning Bureau',
+  'Vigilance & Grievance Cell',
+  'Student Welfare Division'
+];
+
+// Helper to select an eligible officer for a bureau using fair distribution
+function selectEligibleOfficer(bureauName) {
+  if (!bureauName) return null;
+  const users = readCollection('users');
+  const bureauOfficers = users.filter(u =>
+    u.role === 'OFFICER' &&
+    u.bureau &&
+    u.bureau.trim().toLowerCase() === bureauName.trim().toLowerCase()
+  );
+
+  if (bureauOfficers.length === 0) {
+    return null;
+  }
+
+  if (bureauOfficers.length === 1) {
+    return bureauOfficers[0];
+  }
+
+  // Fair distribution: find officer with fewest active (pending) complaints
+  const complaints = readCollection('complaints');
+  const officerWorkload = bureauOfficers.map(officer => {
+    const activeCount = complaints.filter(c =>
+      c.assignedOfficerId === officer._id &&
+      c.status !== 'Resolved' &&
+      c.status !== 'Closed'
+    ).length;
+    return { officer, activeCount };
+  });
+
+  officerWorkload.sort((a, b) => a.activeCount - b.activeCount);
+  return officerWorkload[0].officer;
+}
+
 // POST /api/complaints - Submit new complaint (Student)
 router.post('/', authenticateToken, authorizeRoles('STUDENT', 'SUPERVISOR'), (req, res) => {
   const {
@@ -165,10 +215,76 @@ router.post('/', authenticateToken, authorizeRoles('STUDENT', 'SUPERVISOR'), (re
     });
   }
 
+  // Validate bureau against configured bureaus
+  const selectedBureau = (departmentBureau && departmentBureau.trim()) || 'Approval Bureau';
+  const isValidBureau = CONFIGURED_BUREAUS.some(
+    b => b.toLowerCase() === selectedBureau.toLowerCase()
+  );
+  if (!isValidBureau) {
+    return res.status(400).json({
+      success: false,
+      message: `Invalid bureau selected: "${departmentBureau}". Must be one of: ${CONFIGURED_BUREAUS.join(', ')}`
+    });
+  }
+
+  // Canonicalize bureau name from configured list
+  const canonicalBureau = CONFIGURED_BUREAUS.find(
+    b => b.toLowerCase() === selectedBureau.toLowerCase()
+  ) || selectedBureau;
+
+  // Find eligible officer for the selected bureau
+  const assignedOfficer = selectEligibleOfficer(canonicalBureau);
+
   const complaintId = generateReferenceId();
   const now = new Date();
+  const nowIso = now.toISOString();
   // 15 days SLA target demo review target
   const dueDate = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000).toISOString();
+
+  // Initial timeline entry for registration
+  const timeline = [
+    {
+      stage: 'Submitted',
+      title: 'Complaint Registered',
+      description: `Case generated with reference number ${complaintId}. Acknowledgment dispatched.`,
+      actionBy: req.user.name,
+      role: req.user.role,
+      timestamp: nowIso
+    }
+  ];
+
+  let initialStatus = 'Submitted';
+  let assignedOfficerId = null;
+  let assignedOfficerName = 'Unassigned';
+  let assignmentTimestamp = null;
+  let lastPublicUpdate = 'Complaint registered and assigned unique reference number for review.';
+  let nextPendingAction = NEXT_ACTIONS['Submitted'];
+
+  if (assignedOfficer) {
+    initialStatus = 'Assigned to Bureau';
+    assignedOfficerId = assignedOfficer._id;
+    assignedOfficerName = assignedOfficer.name;
+    assignmentTimestamp = nowIso;
+    lastPublicUpdate = `Complaint assigned to ${canonicalBureau} (${assignedOfficer.name}) for review.`;
+    nextPendingAction = NEXT_ACTIONS['Assigned to Bureau'];
+
+    // Timeline entry for automatic bureau & officer assignment
+    timeline.push({
+      stage: 'Assigned to Bureau',
+      title: `Assigned to ${canonicalBureau}`,
+      description: `Automatically routed to ${canonicalBureau} and assigned to officer ${assignedOfficer.name}.`,
+      actionBy: 'System Automation',
+      role: 'SYSTEM',
+      timestamp: nowIso,
+      bureau: canonicalBureau,
+      officerId: assignedOfficer._id,
+      officerName: assignedOfficer.name
+    });
+  } else {
+    // No eligible officer configured for this bureau
+    lastPublicUpdate = `Complaint registered under ${canonicalBureau}. Awaiting administrator assignment of bureau officer.`;
+    nextPendingAction = 'Awaiting officer allocation by system administrator';
+  }
 
   const preliminaryDoc = {
     complaintId,
@@ -177,9 +293,10 @@ router.post('/', authenticateToken, authorizeRoles('STUDENT', 'SUPERVISOR'), (re
     institutionName: institutionName.trim(),
     institutionCode: institutionCode || 'AICTE-INST-9821',
     institutionLocation: institutionLocation || 'New Delhi, India',
-    assignedBureau: departmentBureau || 'Approval Bureau',
-    assignedOfficerId: null,
-    assignedOfficerName: 'Unassigned',
+    assignedBureau: canonicalBureau,
+    assignedOfficerId,
+    assignedOfficerName,
+    assignmentTimestamp,
     incidentDate: incidentDate || new Date().toISOString().split('T')[0],
     description: description.trim(),
     contactPreference: contactPreference || 'Email',
@@ -187,24 +304,15 @@ router.post('/', authenticateToken, authorizeRoles('STUDENT', 'SUPERVISOR'), (re
       { name: 'Fee_Receipt_Proof.pdf', size: '1.2 MB', url: '#' },
       { name: 'Application_Copy.pdf', size: '540 KB', url: '#' }
     ],
-    status: 'Submitted',
+    status: initialStatus,
     priority: 'Normal',
-    nextPendingAction: NEXT_ACTIONS['Submitted'],
-    lastPublicUpdate: 'Complaint registered and assigned unique reference number for review.',
+    nextPendingAction,
+    lastPublicUpdate,
     complainantId: req.user.id,
     complainantName: req.user.name,
     complainantEmail: req.user.email,
     dueDate,
-    timeline: [
-      {
-        stage: 'Submitted',
-        title: 'Complaint Registered',
-        description: `Case generated with reference number ${complaintId}. Acknowledgment dispatched.`,
-        actionBy: req.user.name,
-        role: req.user.role,
-        timestamp: now.toISOString()
-      }
-    ],
+    timeline,
     internalNotes: [],
     officerActionLogs: [],
     relatedMatches: []
@@ -221,20 +329,44 @@ router.post('/', authenticateToken, authorizeRoles('STUDENT', 'SUPERVISOR'), (re
     userId: req.user.id,
     userName: req.user.name,
     userRole: req.user.role,
-    details: `Complaint submitted for institution ${institutionName}`
+    details: `Complaint submitted for institution ${institutionName}. Bureau: ${canonicalBureau}`
   });
+
+  if (assignedOfficer) {
+    logAudit({
+      action: 'CASE_ASSIGNMENT_CHANGED',
+      complaintId,
+      userId: 'SYSTEM',
+      userName: 'SetuCase Automated Dispatcher',
+      userRole: 'SYSTEM',
+      details: `Complaint automatically assigned to bureau "${canonicalBureau}" and officer "${assignedOfficer.name}" (${assignedOfficer._id})`
+    });
+
+    // Notify assigned officer
+    createNotification({
+      userId: assignedOfficer._id,
+      title: 'New Complaint Assigned',
+      message: `Case ${complaintId} (${title.trim()}) has been assigned to your bureau desk.`,
+      complaintId,
+      type: 'INFO'
+    });
+  }
 
   createNotification({
     userId: req.user.id,
     title: 'Complaint Filed Successfully',
-    message: `Your grievance has been submitted under tracking ID ${complaintId}.`,
+    message: assignedOfficer
+      ? `Your grievance ${complaintId} has been registered and assigned to ${assignedOfficer.name} (${canonicalBureau}).`
+      : `Your grievance ${complaintId} has been registered under ${canonicalBureau}. Officer assignment pending.`,
     complaintId,
     type: 'SUCCESS'
   });
 
   res.status(201).json({
     success: true,
-    message: 'Complaint submitted successfully',
+    message: assignedOfficer
+      ? 'Complaint submitted and automatically assigned to bureau officer'
+      : 'Complaint submitted successfully; officer assignment pending administrator allocation',
     complaintId,
     complaint: newComplaint
   });

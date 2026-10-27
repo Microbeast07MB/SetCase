@@ -127,6 +127,12 @@ body {
   border: 1px solid #bfdbfe;
 }
 
+.badge-assigned {
+  background-color: #eef2ff;
+  color: #4338ca;
+  border: 1px solid #c7d2fe;
+}
+
 .card {
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);

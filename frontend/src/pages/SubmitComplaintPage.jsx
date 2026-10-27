@@ -157,11 +157,17 @@ export const SubmitComplaintPage = ({ setActiveTab, setSelectedComplaintId }) =>
             </div>
             <div style={{ fontSize: '0.825rem', color: '#334155', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               <div><strong>Institution:</strong> {formData.institutionName}</div>
-              <div><strong>Assigned Initial Bureau:</strong> {formData.departmentBureau}</div>
-              <div><strong>Initial Status:</strong> <span className="badge badge-info">Submitted</span></div>
+              <div><strong>Assigned Bureau:</strong> {successResult.complaint?.assignedBureau || formData.departmentBureau}</div>
+              <div><strong>Assigned Officer:</strong> {successResult.complaint?.assignedOfficerName || 'Pending Allocation'}</div>
+              <div>
+                <strong>Current Status:</strong>{' '}
+                <span className={successResult.complaint?.status === 'Assigned to Bureau' ? 'badge badge-assigned' : 'badge badge-info'}>
+                  {successResult.complaint?.status || 'Assigned to Bureau'}
+                </span>
+              </div>
               <div><strong>Uploaded Files:</strong> {uploadedFiles.length} item(s) attached</div>
               <div style={{ marginTop: '0.25rem', padding: '0.5rem', backgroundColor: '#eff6ff', borderRadius: '4px', color: '#1e40af', fontSize: '0.8rem' }}>
-                <strong>Immediate Next Step:</strong> Your complaint is undergoing initial desk screening and bureau categorization.
+                <strong>Immediate Next Step:</strong> {successResult.complaint?.nextPendingAction || 'Assessment and scheduling by the assigned bureau desk.'}
               </div>
             </div>
           </div>

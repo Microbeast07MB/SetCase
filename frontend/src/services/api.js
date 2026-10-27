@@ -133,6 +133,12 @@ export const api = {
     let list = mockDb.getComplaints();
     if (user?.role === 'STUDENT') {
       list = list.filter(c => c.complainantId === user._id || c.complainantEmail === user.email);
+    } else if (user?.role === 'OFFICER') {
+      if (params.assignedToMe === 'true') {
+        list = list.filter(c => c.assignedOfficerId === user._id);
+      } else {
+        list = list.filter(c => !user.bureau || c.assignedBureau === user.bureau || c.assignedOfficerId === user._id);
+      }
     }
     return { success: true, total: list.length, complaints: list };
   },
@@ -167,36 +173,92 @@ export const api = {
     } catch (e) {}
 
     const list = mockDb.getComplaints();
+    const users = mockDb.getUsers();
     const user = getCurrentUser();
     const count = list.length + 1;
     const complaintId = `SC-2026-${String(count).padStart(4, '0')}`;
+    const selectedBureau = data.departmentBureau || 'Approval Bureau';
+    const bureauOfficers = users.filter(u =>
+      u.role === 'OFFICER' &&
+      u.bureau &&
+      u.bureau.trim().toLowerCase() === selectedBureau.trim().toLowerCase()
+    );
+
+    let assignedOfficer = null;
+    if (bureauOfficers.length > 0) {
+      // Fair distribution based on active complaint count
+      const officerWorkload = bureauOfficers.map(officer => {
+        const activeCount = list.filter(c =>
+          c.assignedOfficerId === officer._id &&
+          c.status !== 'Resolved' &&
+          c.status !== 'Closed'
+        ).length;
+        return { officer, activeCount };
+      });
+      officerWorkload.sort((a, b) => a.activeCount - b.activeCount);
+      assignedOfficer = officerWorkload[0].officer;
+    }
+
+    const nowIso = new Date().toISOString();
+    const timeline = [
+      {
+        stage: 'Submitted',
+        title: 'Complaint Registered',
+        description: `Case generated with reference number ${complaintId}.`,
+        actionBy: user?.name || 'Student',
+        role: 'STUDENT',
+        timestamp: nowIso
+      }
+    ];
+
+    if (assignedOfficer) {
+      timeline.push({
+        stage: 'Assigned to Bureau',
+        title: `Assigned to ${selectedBureau}`,
+        description: `Automatically routed to ${selectedBureau} and assigned to officer ${assignedOfficer.name}.`,
+        actionBy: 'System Automation',
+        role: 'SYSTEM',
+        timestamp: nowIso,
+        bureau: selectedBureau,
+        officerId: assignedOfficer._id,
+        officerName: assignedOfficer.name
+      });
+    }
+
     const newDoc = {
       _id: 'comp_' + Date.now(),
       complaintId,
       ...data,
-      status: 'Submitted',
+      assignedBureau: selectedBureau,
+      assignedOfficerId: assignedOfficer ? assignedOfficer._id : null,
+      assignedOfficerName: assignedOfficer ? assignedOfficer.name : 'Unassigned',
+      assignmentTimestamp: assignedOfficer ? nowIso : null,
+      status: assignedOfficer ? 'Assigned to Bureau' : 'Submitted',
       priority: 'Normal',
-      nextPendingAction: 'Initial screening and bureau categorization',
+      nextPendingAction: assignedOfficer
+        ? 'Assessment and scheduling by the assigned bureau desk'
+        : 'Awaiting officer allocation by system administrator',
+      lastPublicUpdate: assignedOfficer
+        ? `Complaint assigned to ${selectedBureau} (${assignedOfficer.name}) for review.`
+        : `Complaint registered under ${selectedBureau}. Awaiting bureau officer assignment.`,
       complainantId: user?._id || 'usr_student_01',
       complainantName: user?.name || 'Aarav Sharma',
       complainantEmail: user?.email || 'student@demo.gov.in',
-      createdAt: new Date().toISOString(),
-      timeline: [
-        {
-          stage: 'Submitted',
-          title: 'Complaint Registered',
-          description: `Case generated with reference number ${complaintId}.`,
-          actionBy: user?.name || 'Student',
-          role: 'STUDENT',
-          timestamp: new Date().toISOString()
-        }
-      ],
+      createdAt: nowIso,
+      timeline,
       internalNotes: [],
-      oneLineSummary: `Reported ${data.category.toLowerCase()} (${data.title.slice(0, 50)}...) at ${data.institutionName}; currently submitted and awaiting initial review. [AI-Assisted]`
+      oneLineSummary: `Reported ${data.category.toLowerCase()} (${data.title.slice(0, 50)}...) at ${data.institutionName}; currently ${assignedOfficer ? 'assigned to ' + selectedBureau : 'submitted'}. [AI-Assisted]`
     };
     list.unshift(newDoc);
     mockDb.saveComplaints(list);
-    return { success: true, complaintId, complaint: newDoc };
+    return {
+      success: true,
+      message: assignedOfficer
+        ? 'Complaint submitted and automatically assigned to bureau officer'
+        : 'Complaint submitted successfully; officer assignment pending administrator allocation',
+      complaintId,
+      complaint: newDoc
+    };
   },
 
   updateStatus: async (id, data) => {

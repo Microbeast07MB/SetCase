@@ -35,8 +35,9 @@ import {
 
 const STATUS_COLORS = {
   'Submitted': '#3b82f6',
+  'Assigned to Bureau': '#6366f1',
   'Initial Review': '#0ea5e9',
-  'Under Investigation': '#6366f1',
+  'Under Investigation': '#4f46e5',
   'Awaiting Documents': '#f59e0b',
   'Awaiting Departmental Action': '#ec4899',
   'Resolved': '#10b981',
@@ -86,6 +87,8 @@ export const DashboardPage = ({ setActiveTab, setSelectedComplaintId }) => {
       case 'Resolved':
       case 'Closed':
         return <span className="badge badge-resolved"><CheckCircle2 size={12} /> {status}</span>;
+      case 'Assigned to Bureau':
+        return <span className="badge badge-assigned"><Clock size={12} /> {status}</span>;
       case 'Initial Review':
       case 'Submitted':
         return <span className="badge badge-info"><Clock size={12} /> {status}</span>;
@@ -132,7 +135,7 @@ export const DashboardPage = ({ setActiveTab, setSelectedComplaintId }) => {
   // Filter complaints dynamically by card filter
   const displayedComplaints = complaints.filter(c => {
     if (activeFilter === 'ALL') return true;
-    if (activeFilter === 'INVESTIGATION') return c.status === 'Under Investigation' || c.status === 'Initial Review';
+    if (activeFilter === 'INVESTIGATION') return c.status === 'Assigned to Bureau' || c.status === 'Under Investigation' || c.status === 'Initial Review';
     if (activeFilter === 'AWAITING') return c.status === 'Awaiting Documents' || c.status === 'Awaiting Departmental Action';
     if (activeFilter === 'RESOLVED') return c.status === 'Resolved' || c.status === 'Closed';
     if (activeFilter === 'OVERDUE') {
@@ -245,7 +248,7 @@ export const DashboardPage = ({ setActiveTab, setSelectedComplaintId }) => {
             <Clock size={18} color="#0284c7" />
           </div>
           <div style={{ fontSize: '1.85rem', fontWeight: 800, color: '#0284c7', marginTop: '0.35rem' }}>
-            {isStudent ? complaints.filter(c => c.status === 'Initial Review' || c.status === 'Under Investigation').length : metrics.underReview}
+            {isStudent ? complaints.filter(c => c.status === 'Assigned to Bureau' || c.status === 'Initial Review' || c.status === 'Under Investigation').length : metrics.underReview}
           </div>
           <div style={{ fontSize: '0.725rem', color: '#0284c7', fontWeight: 600, marginTop: '0.2rem' }}>
             Filter active reviews
@@ -419,6 +422,13 @@ export const DashboardPage = ({ setActiveTab, setSelectedComplaintId }) => {
 
                     <div style={{ fontSize: '0.775rem', color: '#64748b' }}>
                       <strong>{c.institutionName}</strong> • {c.category}
+                    </div>
+
+                    <div style={{ fontSize: '0.75rem', color: '#4338ca', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      <span><strong>Bureau:</strong> {c.assignedBureau || 'Approval Bureau'}</span>
+                      {c.assignedOfficerName && c.assignedOfficerName !== 'Unassigned' && (
+                        <span>• <strong>Officer:</strong> {c.assignedOfficerName}</span>
+                      )}
                     </div>
 
                     {/* Expandable One-Line AI Summary Box */}

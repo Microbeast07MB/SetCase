@@ -47,6 +47,8 @@ export const OfficerCasesPage = ({ setActiveTab, setSelectedComplaintId }) => {
       case 'Resolved':
       case 'Closed':
         return <span className="badge badge-resolved">{status}</span>;
+      case 'Assigned to Bureau':
+        return <span className="badge badge-assigned">{status}</span>;
       case 'Initial Review':
       case 'Submitted':
         return <span className="badge badge-info">{status}</span>;
@@ -116,6 +118,7 @@ export const OfficerCasesPage = ({ setActiveTab, setSelectedComplaintId }) => {
         >
           <option value="ALL">All Statuses</option>
           <option value="Submitted">Submitted</option>
+          <option value="Assigned to Bureau">Assigned to Bureau</option>
           <option value="Initial Review">Initial Review</option>
           <option value="Under Investigation">Under Investigation</option>
           <option value="Awaiting Documents">Awaiting Documents</option>

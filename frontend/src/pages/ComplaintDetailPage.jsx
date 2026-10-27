@@ -189,7 +189,18 @@ export const ComplaintDetailPage = ({ complaintId, setActiveTab, setSelectedComp
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Priority:</span>
           <span className="badge badge-pending">{complaint.priority || 'Normal'}</span>
-          <span className="badge badge-info" style={{ fontSize: '0.8rem' }}>{complaint.status}</span>
+          <span
+            className={
+              complaint.status === 'Assigned to Bureau'
+                ? 'badge badge-assigned'
+                : complaint.status === 'Resolved' || complaint.status === 'Closed'
+                ? 'badge badge-resolved'
+                : 'badge badge-info'
+            }
+            style={{ fontSize: '0.8rem' }}
+          >
+            {complaint.status}
+          </span>
         </div>
       </div>
 
