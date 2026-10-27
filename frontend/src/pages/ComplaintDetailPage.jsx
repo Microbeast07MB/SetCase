@@ -337,15 +337,47 @@ export const ComplaintDetailPage = ({ complaintId, setActiveTab, setSelectedComp
           </p>
         </div>
 
-        {/* Evidence Pill Bar */}
-        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Evidence:</span>
-          {(complaint.supportingDocuments || []).map((doc, idx) => (
-            <div key={idx} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.3rem 0.6rem', backgroundColor: '#f1f5f9', borderRadius: '4px', fontSize: '0.75rem', color: '#0f172a' }}>
-              <FileText size={14} color="#2563eb" />
-              <span>{doc.name}</span>
-            </div>
-          ))}
+        {/* Evidence & Images Gallery */}
+        <div style={{ marginTop: '1.25rem' }}>
+          <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+            Attached Evidence & Uploaded Records ({(complaint.supportingDocuments || []).length})
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.75rem' }}>
+            {(complaint.supportingDocuments || []).map((doc, idx) => (
+              <div
+                key={idx}
+                style={{
+                  padding: '0.6rem 0.8rem',
+                  backgroundColor: '#f8fafc',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.6rem'
+                }}
+              >
+                {doc.isImage || (doc.url && doc.url.startsWith('data:image')) ? (
+                  <img
+                    src={doc.url}
+                    alt={doc.name}
+                    style={{ width: '42px', height: '42px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #cbd5e1' }}
+                  />
+                ) : (
+                  <div style={{ width: '42px', height: '42px', borderRadius: '4px', backgroundColor: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <FileText size={20} color="#2563eb" />
+                  </div>
+                )}
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {doc.name}
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: '#64748b' }}>
+                    {doc.size || 'Verified Doc'}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { api } from '../services/api';
 import {
   FilePlus,
@@ -9,7 +9,10 @@ import {
   Calendar,
   FileCheck,
   ShieldCheck,
-  Info
+  Info,
+  X,
+  FileText,
+  Image as ImageIcon
 } from 'lucide-react';
 
 export const SubmitComplaintPage = ({ setActiveTab, setSelectedComplaintId }) => {
@@ -24,6 +27,10 @@ export const SubmitComplaintPage = ({ setActiveTab, setSelectedComplaintId }) =>
     description: '',
     contactPreference: 'Email'
   });
+
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -51,6 +58,53 @@ export const SubmitComplaintPage = ({ setActiveTab, setSelectedComplaintId }) =>
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const formatFileSize = (bytes) => {
+    if (bytes < 1024) return bytes + ' B';
+    else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    else return (bytes / 1048576).toFixed(1) + ' MB';
+  };
+
+  const handleFileSelect = (files) => {
+    const fileList = Array.from(files);
+    fileList.forEach(file => {
+      const reader = new FileReader();
+      const isImg = file.type.startsWith('image/');
+      reader.onload = (e) => {
+        const newFileObj = {
+          name: file.name,
+          size: formatFileSize(file.size),
+          type: file.type,
+          isImage: isImg,
+          url: e.target.result // Base64 data URL previewable directly!
+        };
+        setUploadedFiles(prev => [...prev, newFileObj]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleRemoveFile = (indexToRemove) => {
+    setUploadedFiles(prev => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFileSelect(e.dataTransfer.files);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -62,12 +116,13 @@ export const SubmitComplaintPage = ({ setActiveTab, setSelectedComplaintId }) =>
 
     setLoading(true);
     try {
+      const docsToSubmit = uploadedFiles.length > 0 ? uploadedFiles : [
+        { name: 'Fee_Receipt_Proof.pdf', size: '1.2 MB', url: '#' }
+      ];
+
       const res = await api.submitComplaint({
         ...formData,
-        supportingDocuments: [
-          { name: 'Fee_Receipt_Proof.pdf', size: '1.2 MB', url: '#' },
-          { name: 'Official_Demand_Notice.pdf', size: '780 KB', url: '#' }
-        ]
+        supportingDocuments: docsToSubmit
       });
       setLoading(false);
       if (res.success) {
@@ -104,6 +159,7 @@ export const SubmitComplaintPage = ({ setActiveTab, setSelectedComplaintId }) =>
               <div><strong>Institution:</strong> {formData.institutionName}</div>
               <div><strong>Assigned Initial Bureau:</strong> {formData.departmentBureau}</div>
               <div><strong>Initial Status:</strong> <span className="badge badge-info">Submitted</span></div>
+              <div><strong>Uploaded Files:</strong> {uploadedFiles.length} item(s) attached</div>
               <div style={{ marginTop: '0.25rem', padding: '0.5rem', backgroundColor: '#eff6ff', borderRadius: '4px', color: '#1e40af', fontSize: '0.8rem' }}>
                 <strong>Immediate Next Step:</strong> Your complaint is undergoing initial desk screening and bureau categorization.
               </div>
@@ -123,6 +179,7 @@ export const SubmitComplaintPage = ({ setActiveTab, setSelectedComplaintId }) =>
             <button
               onClick={() => {
                 setSuccessResult(null);
+                setUploadedFiles([]);
                 setFormData(prev => ({ ...prev, title: '', description: '' }));
               }}
               className="btn-secondary"
@@ -291,20 +348,119 @@ export const SubmitComplaintPage = ({ setActiveTab, setSelectedComplaintId }) =>
             />
           </div>
 
-          {/* Mock Document Upload Area */}
+          {/* Functional Real Image / Document Upload Area */}
           <div>
             <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#1e293b', marginBottom: '0.35rem' }}>
               Supporting Evidence & Documents
             </label>
-            <div style={{ border: '2px dashed #cbd5e1', borderRadius: '0.5rem', padding: '1.5rem', textAlign: 'center', backgroundColor: '#f8fafc' }}>
-              <Upload size={24} color="#64748b" style={{ margin: '0 auto 0.5rem' }} />
-              <div style={{ fontSize: '0.825rem', fontWeight: 600, color: '#334155' }}>
-                Drag and drop receipt copies, notices, or photos (PDF, PNG, JPG)
+
+            {/* Hidden native file input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              multiple
+              accept="image/*,.pdf,.doc,.docx"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  handleFileSelect(e.target.files);
+                }
+              }}
+            />
+
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current && fileInputRef.current.click()}
+              style={{
+                border: `2px dashed ${isDragging ? '#2563eb' : '#cbd5e1'}`,
+                borderRadius: '0.5rem',
+                padding: '1.75rem',
+                textAlign: 'center',
+                backgroundColor: isDragging ? '#eff6ff' : '#f8fafc',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.5rem' }}>
+                <Upload size={20} color="#2563eb" />
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.2rem' }}>
-                Prototype pre-attaches sample certified evidence: <code>Fee_Receipt_Proof.pdf</code> (1.2 MB)
+              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1e293b' }}>
+                Click to browse or drag and drop files here
+              </div>
+              <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>
+                Supports Images (PNG, JPG, JPEG) and Documents (PDF, DOC)
               </div>
             </div>
+
+            {/* Uploaded File Previews */}
+            {uploadedFiles.length > 0 && (
+              <div style={{ marginTop: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase' }}>
+                  Attached Documents ({uploadedFiles.length}):
+                </span>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem' }}>
+                  {uploadedFiles.map((file, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        padding: '0.5rem 0.75rem',
+                        backgroundColor: '#ffffff',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '0.375rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '0.5rem',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
+                        {file.isImage ? (
+                          <img
+                            src={file.url}
+                            alt="preview"
+                            style={{ width: '36px', height: '36px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e2e8f0' }}
+                          />
+                        ) : (
+                          <div style={{ width: '36px', height: '36px', borderRadius: '4px', backgroundColor: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <FileText size={18} color="#2563eb" />
+                          </div>
+                        )}
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {file.name}
+                          </div>
+                          <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
+                            {file.size}
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveFile(idx);
+                        }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#ef4444',
+                          cursor: 'pointer',
+                          padding: '0.2rem',
+                          borderRadius: '4px'
+                        }}
+                        title="Remove file"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Submit Actions */}
