@@ -1,0 +1,325 @@
+[
+  {
+    "_id": "comp_001",
+    "complaintId": "SC-2026-0001",
+    "title": "Allegation of Unapproved Capitation Fee for Examination Hall Tickets",
+    "category": "Excessive fees or financial grievances",
+    "institutionName": "ABC Institute of Technology",
+    "institutionCode": "AICTE-INST-9821",
+    "institutionLocation": "Greater Noida, Uttar Pradesh",
+    "assignedBureau": "Approval Bureau",
+    "assignedOfficerId": "usr_officer_01",
+    "assignedOfficerName": "Dr. Rajesh Verma",
+    "incidentDate": "2026-09-15",
+    "description": "Reported grievance by final-year students alleging that the administration at ABC Institute of Technology is withholding semester examination admit cards demanding an unauthorized Rs 15,000 \"Campus Development Cess\", which is not approved under AICTE Fee Regulatory Committee guidelines.",
+    "contactPreference": "Email",
+    "status": "Under Investigation",
+    "priority": "High",
+    "nextPendingAction": "Formal response review from ABC Institute Management",
+    "lastPublicUpdate": "Bureau sent inquiry letter to institute registrar requesting fee audit statements.",
+    "complainantId": "usr_student_01",
+    "complainantName": "Aarav Sharma",
+    "complainantEmail": "student@demo.gov.in",
+    "dueDate": "2026-10-31T16:11:21.487Z",
+    "createdAt": "2026-10-13T16:11:21.487Z",
+    "updatedAt": "2026-10-26T16:11:21.487Z",
+    "supportingDocuments": [
+      {
+        "name": "Fee_Demand_Notice_Circular.pdf",
+        "size": "1.4 MB",
+        "url": "#"
+      },
+      {
+        "name": "Payment_Receipt_Compulsion.pdf",
+        "size": "840 KB",
+        "url": "#"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Submitted",
+        "title": "Complaint Registered",
+        "description": "Grievance lodged online with fee demand receipts attached.",
+        "actionBy": "Aarav Sharma",
+        "role": "STUDENT",
+        "timestamp": "2026-10-13T16:11:21.487Z"
+      },
+      {
+        "stage": "Initial Review",
+        "title": "Document Validation",
+        "description": "Initial scrutiny confirmed non-standard fee head in circular.",
+        "actionBy": "Dr. Rajesh Verma",
+        "role": "OFFICER",
+        "timestamp": "2026-10-16T16:11:21.487Z"
+      },
+      {
+        "stage": "Assigned to Bureau",
+        "title": "Assigned to Approval Bureau",
+        "description": "Forwarded for compliance verification against statutory approval handbook.",
+        "actionBy": "Dr. Arvind Mehra",
+        "role": "SUPERVISOR",
+        "timestamp": "2026-10-18T16:11:21.487Z"
+      },
+      {
+        "stage": "Under Investigation",
+        "title": "Explanation Demanded from College",
+        "description": "Formal summons notice dispatched to College Governing Board with 7-day SLA.",
+        "actionBy": "Dr. Rajesh Verma",
+        "role": "OFFICER",
+        "timestamp": "2026-10-23T16:11:21.487Z"
+      }
+    ],
+    "internalNotes": [
+      {
+        "author": "Dr. Rajesh Verma",
+        "role": "OFFICER",
+        "note": "Similar reports received from two other departments of ABC Institute. Potential systemic fee compliance breach.",
+        "timestamp": "2026-10-19T16:11:21.487Z"
+      }
+    ],
+    "relatedMatches": [],
+    "oneLineSummary": "Reported excessive fees or financial grievances (Allegation of Unapproved Capitation Fee for Examination H...) at ABC Institute of Technology; currently under investigation and awaiting formal response review from abc institute management. [AI-Assisted]"
+  },
+  {
+    "_id": "comp_002",
+    "complaintId": "SC-2026-0002",
+    "title": "Reported Mandatory Laboratory Development Surcharge on 3rd Year Students",
+    "category": "Excessive fees or financial grievances",
+    "institutionName": "ABC Institute of Technology",
+    "institutionCode": "AICTE-INST-9821",
+    "institutionLocation": "Greater Noida, Uttar Pradesh",
+    "assignedBureau": "Approval Bureau",
+    "assignedOfficerId": "usr_officer_01",
+    "assignedOfficerName": "Dr. Rajesh Verma",
+    "incidentDate": "2026-09-18",
+    "description": "Allegation submitted regarding compulsory demand of Rs 12,500 laboratory fee at ABC Institute of Technology prior to practical session admittance.",
+    "contactPreference": "Phone",
+    "status": "Initial Review",
+    "priority": "High",
+    "nextPendingAction": "Cross-verification with Fee Committee Schedule",
+    "lastPublicUpdate": "Case logged; undergoing documentary comparison.",
+    "complainantId": "usr_student_02_seed",
+    "complainantName": "Neha Deshmukh",
+    "complainantEmail": "neha.d@gmail.com",
+    "dueDate": "2026-11-02T16:11:21.487Z",
+    "createdAt": "2026-10-18T16:11:21.487Z",
+    "updatedAt": "2026-10-25T16:11:21.487Z",
+    "supportingDocuments": [
+      {
+        "name": "Lab_Fee_Challan.pdf",
+        "size": "1.1 MB",
+        "url": "#"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Submitted",
+        "title": "Complaint Registered",
+        "description": "Case registered by complainant.",
+        "actionBy": "Neha Deshmukh",
+        "role": "STUDENT",
+        "timestamp": "2026-10-18T16:11:21.487Z"
+      },
+      {
+        "stage": "Initial Review",
+        "title": "Initial Scrutiny",
+        "description": "Reviewing against state fee regulatory committee tariff.",
+        "actionBy": "Dr. Rajesh Verma",
+        "role": "OFFICER",
+        "timestamp": "2026-10-25T16:11:21.487Z"
+      }
+    ],
+    "internalNotes": [],
+    "relatedMatches": [],
+    "oneLineSummary": "Reported excessive fees or financial grievances (Reported Mandatory Laboratory Development Surcharge on 3r...) at ABC Institute of Technology; currently initial review and awaiting cross-verification with fee committee schedule. [AI-Assisted]"
+  },
+  {
+    "_id": "comp_003",
+    "complaintId": "SC-2026-0003",
+    "title": "Alleged Sub-Standard Computer Lab Hardware and Inoperative Fire Safety Measures",
+    "category": "Infrastructure and facilities",
+    "institutionName": "ABC Institute of Technology",
+    "institutionCode": "AICTE-INST-9821",
+    "institutionLocation": "Greater Noida, Uttar Pradesh",
+    "assignedBureau": "Approval Bureau",
+    "assignedOfficerId": "usr_officer_01",
+    "assignedOfficerName": "Dr. Rajesh Verma",
+    "incidentDate": "2026-08-10",
+    "description": "Reported concern regarding lack of working terminal computers in 4th floor IT Lab and non-functioning fire extinguishers in academic block B.",
+    "contactPreference": "Email",
+    "status": "Awaiting Departmental Action",
+    "priority": "Urgent",
+    "nextPendingAction": "Physical Surprise Inspection Bureau Order",
+    "lastPublicUpdate": "Case forwarded to Regional Office Inspection Roster.",
+    "complainantId": "usr_student_03_seed",
+    "complainantName": "Vikas Kumar",
+    "complainantEmail": "vikas.k@yahoo.com",
+    "dueDate": "2026-10-25T16:11:21.487Z",
+    "createdAt": "2026-10-02T16:11:21.487Z",
+    "updatedAt": "2026-10-22T16:11:21.487Z",
+    "supportingDocuments": [
+      {
+        "name": "Lab_Photos.pdf",
+        "size": "4.8 MB",
+        "url": "#"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Submitted",
+        "title": "Complaint Logged",
+        "description": "Complainant uploaded photographs of unserviced equipment.",
+        "actionBy": "Vikas Kumar",
+        "role": "STUDENT",
+        "timestamp": "2026-10-02T16:11:21.487Z"
+      },
+      {
+        "stage": "Under Investigation",
+        "title": "Notice Served",
+        "description": "Notice served to Director ABC Institute.",
+        "actionBy": "Dr. Rajesh Verma",
+        "role": "OFFICER",
+        "timestamp": "2026-10-12T16:11:21.487Z"
+      },
+      {
+        "stage": "Awaiting Departmental Action",
+        "title": "Escalated to Infrastructure Committee",
+        "description": "Awaiting formal surprise inspection panel composition.",
+        "actionBy": "Dr. Arvind Mehra",
+        "role": "SUPERVISOR",
+        "timestamp": "2026-10-22T16:11:21.487Z"
+      }
+    ],
+    "internalNotes": [
+      {
+        "author": "Dr. Arvind Mehra",
+        "role": "SUPERVISOR",
+        "note": "Requires immediate dispatch of Regional Committee inspection team before winter semester.",
+        "timestamp": "2026-10-22T16:11:21.487Z"
+      }
+    ],
+    "relatedMatches": [],
+    "oneLineSummary": "Reported infrastructure and facilities (Alleged Sub-Standard Computer Lab Hardware and Inoperativ...) at ABC Institute of Technology; currently awaiting departmental action and awaiting physical surprise inspection bureau order. [AI-Assisted]"
+  },
+  {
+    "_id": "comp_004",
+    "complaintId": "SC-2026-0004",
+    "title": "Withholding of Original Degree Certificates Pending Unofficial Alumni Contribution",
+    "category": "Academic and examination issues",
+    "institutionName": "ABC Institute of Technology",
+    "institutionCode": "AICTE-INST-9821",
+    "institutionLocation": "Greater Noida, Uttar Pradesh",
+    "assignedBureau": "Approval Bureau",
+    "assignedOfficerId": "usr_officer_01",
+    "assignedOfficerName": "Dr. Rajesh Verma",
+    "incidentDate": "2026-07-20",
+    "description": "Grievance submitted claiming college refused to surrender original class 12th certificates and bachelor transcripts without payment of voluntary alumni endowment.",
+    "contactPreference": "Email",
+    "status": "Resolved",
+    "priority": "High",
+    "nextPendingAction": "Case concluded and complainant feedback captured",
+    "lastPublicUpdate": "Institute refunded fee and handed over original certificates under AICTE regional observer presence.",
+    "complainantId": "usr_student_01",
+    "complainantName": "Aarav Sharma",
+    "complainantEmail": "student@demo.gov.in",
+    "dueDate": "2026-10-17T16:11:21.487Z",
+    "createdAt": "2026-09-12T16:11:21.487Z",
+    "resolvedAt": "2026-10-15T16:11:21.487Z",
+    "resolutionDays": 14,
+    "updatedAt": "2026-10-15T16:11:21.487Z",
+    "supportingDocuments": [
+      {
+        "name": "Original_Retention_Letter.pdf",
+        "size": "1.2 MB",
+        "url": "#"
+      },
+      {
+        "name": "Handover_Handwritten_Memo.pdf",
+        "size": "650 KB",
+        "url": "#"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Submitted",
+        "title": "Complaint Lodged",
+        "description": "Student submitted application.",
+        "actionBy": "Aarav Sharma",
+        "role": "STUDENT",
+        "timestamp": "2026-09-12T16:11:21.487Z"
+      },
+      {
+        "stage": "Under Investigation",
+        "title": "Executive Notice Dispatched",
+        "description": "Strict notice issued citing AICTE Approval Process Handbook Clause 6.1.",
+        "actionBy": "Dr. Rajesh Verma",
+        "role": "OFFICER",
+        "timestamp": "2026-09-25T16:11:21.487Z"
+      },
+      {
+        "stage": "Resolved",
+        "title": "Compliance Verified & Rectified",
+        "description": "Certificates surrendered to complainant with documented receipt.",
+        "actionBy": "Dr. Rajesh Verma",
+        "role": "OFFICER",
+        "timestamp": "2026-10-15T16:11:21.487Z"
+      }
+    ],
+    "internalNotes": [],
+    "relatedMatches": [],
+    "oneLineSummary": "Reported academic and examination issues (Withholding of Original Degree Certificates Pending Unoff...) at ABC Institute of Technology; currently resolved and awaiting case concluded and complainant feedback captured. [AI-Assisted]"
+  },
+  {
+    "_id": "comp_005",
+    "complaintId": "SC-2026-0005",
+    "title": "Shortfall of Required Cadre Ratio in Department of Computer Science",
+    "category": "Faculty or staff-related grievances",
+    "institutionName": "ABC Institute of Technology",
+    "institutionCode": "AICTE-INST-9821",
+    "institutionLocation": "Greater Noida, Uttar Pradesh",
+    "assignedBureau": "Approval Bureau",
+    "assignedOfficerId": "usr_officer_01",
+    "assignedOfficerName": "Dr. Rajesh Verma",
+    "incidentDate": "2026-10-01",
+    "description": "Reported shortage of designated Professors and Associate Professors in Computer Engineering division as mandated by AICTE 1:20 teacher-student ratio norms.",
+    "contactPreference": "Email",
+    "status": "Awaiting Documents",
+    "priority": "Normal",
+    "nextPendingAction": "Faculty roster and biometric attendance records from institute",
+    "lastPublicUpdate": "Directives issued to furnish current roster verified by Registrar.",
+    "complainantId": "usr_student_05_seed",
+    "complainantName": "Priya Iyer",
+    "complainantEmail": "priya.i@example.com",
+    "dueDate": "2026-11-04T16:11:21.487Z",
+    "createdAt": "2026-10-21T16:11:21.487Z",
+    "updatedAt": "2026-10-25T16:11:21.487Z",
+    "supportingDocuments": [
+      {
+        "name": "Department_Timetable.pdf",
+        "size": "920 KB",
+        "url": "#"
+      }
+    ],
+    "timeline": [
+      {
+        "stage": "Submitted",
+        "title": "Complaint Registered",
+        "description": "Grievance submitted regarding faculty vacancy.",
+        "actionBy": "Priya Iyer",
+        "role": "STUDENT",
+        "timestamp": "2026-10-21T16:11:21.487Z"
+      },
+      {
+        "stage": "Awaiting Documents",
+        "title": "Document Call Issued",
+        "description": "Summoned official faculty roster with qualifications and biometric records.",
+        "actionBy": "Dr. Rajesh Verma",
+        "role": "OFFICER",
+        "timestamp": "2026-10-25T16:11:21.487Z"
+      }
+    ],
+    "internalNotes": [],
+    "relatedMatches": [],
+    "oneLineSummary": "Reported faculty or staff-related grievances (Shortfall of Required Cadre Ratio in Department of Comput...) at ABC Institute of Technology; currently awaiting documents and awaiting faculty roster and biometric attendance records from institute. [AI-Assisted]"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "_id": "usr_student_01",
+    "name": "Aarav Sharma",
+    "email": "student@demo.gov.in",
+    "password": "$2a$10$TzZeJVyFl5P5Xcc9nZhhEuQBvFvS/tipJMv30nLZ4tTGehg6yI/Iy",
+    "role": "STUDENT",
+    "phone": "+91 98765 43210",
+    "institutionName": "ABC Institute of Technology",
+    "designation": "B.Tech Student (Final Year)",
+    "isDemo": true,
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    "_id": "usr_officer_01",
+    "name": "Dr. Rajesh Verma",
+    "email": "officer@demo.gov.in",
+    "password": "$2a$10$TzZeJVyFl5P5Xcc9nZhhEuQBvFvS/tipJMv30nLZ4tTGehg6yI/Iy",
+    "role": "OFFICER",
+    "phone": "+91 91234 56789",
+    "bureau": "Approval Bureau",
+    "designation": "Senior Inspection & Grievance Officer",
+    "isDemo": true,
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    "_id": "usr_officer_02",
+    "name": "Dr. Sunita Kulkarni",
+    "email": "officer2@demo.gov.in",
+    "password": "$2a$10$TzZeJVyFl5P5Xcc9nZhhEuQBvFvS/tipJMv30nLZ4tTGehg6yI/Iy",
+    "role": "OFFICER",
+    "phone": "+91 94321 09876",
+    "bureau": "Finance & Accounts Bureau",
+    "designation": "Financial Audit & Compliance Officer",
+    "isDemo": true,
+    "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    "_id": "usr_supervisor_01",
+    "name": "Dr. Arvind Mehra",
+    "email": "supervisor@demo.gov.in",
+    "password": "$2a$10$TzZeJVyFl5P5Xcc9nZhhEuQBvFvS/tipJMv30nLZ4tTGehg6yI/Iy",
+    "role": "SUPERVISOR",
+    "phone": "+91 99887 76655",
+    "bureau": "AICTE Central Grievance Cell",
+    "designation": "Chief Vigilance & Grievance Supervisor",
+    "isDemo": true,
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80"
+  }
+]

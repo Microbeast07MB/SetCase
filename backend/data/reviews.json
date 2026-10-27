@@ -1,0 +1,18 @@
+[
+  {
+    "_id": "rev_001",
+    "complaintId": "SC-2026-0004",
+    "complaintMongoId": "comp_004",
+    "studentId": "usr_student_01",
+    "studentName": "Aarav Sharma",
+    "resolvedSatisfaction": "Yes",
+    "rating": 5,
+    "timeTakenDays": 14,
+    "difficultiesEncountered": [
+      "Initial response delay from institution"
+    ],
+    "writtenFeedback": "AICTE officer Dr. Rajesh Verma intervened decisively. The institute handed over my degree certificates without further illegal fee deduction.",
+    "reopenRequested": false,
+    "submittedAt": "2026-10-17T16:11:21.487Z"
+  }
+]

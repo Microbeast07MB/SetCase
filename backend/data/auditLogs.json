@@ -1,0 +1,104 @@
+[
+  {
+    "_id": "gen_1793119137166_5okag",
+    "action": "USER_LOGIN",
+    "userId": "usr_student_01",
+    "userName": "Aarav Sharma",
+    "userRole": "STUDENT",
+    "details": "User logged in successfully as STUDENT",
+    "ip": "127.0.0.1",
+    "timestamp": "2026-10-27T16:38:57.164Z",
+    "createdAt": "2026-10-27T16:38:57.166Z",
+    "updatedAt": "2026-10-27T16:38:57.166Z"
+  },
+  {
+    "_id": "gen_1793118717047_yqwa3",
+    "action": "USER_LOGIN",
+    "userId": "usr_supervisor_01",
+    "userName": "Dr. Arvind Mehra",
+    "userRole": "SUPERVISOR",
+    "details": "User logged in successfully as SUPERVISOR",
+    "ip": "127.0.0.1",
+    "timestamp": "2026-10-27T16:31:57.047Z",
+    "createdAt": "2026-10-27T16:31:57.047Z",
+    "updatedAt": "2026-10-27T16:31:57.047Z"
+  },
+  {
+    "_id": "gen_1793118683457_llx1s",
+    "action": "USER_LOGIN",
+    "userId": "usr_officer_01",
+    "userName": "Dr. Rajesh Verma",
+    "userRole": "OFFICER",
+    "details": "User logged in successfully as OFFICER",
+    "ip": "127.0.0.1",
+    "timestamp": "2026-10-27T16:31:23.456Z",
+    "createdAt": "2026-10-27T16:31:23.457Z",
+    "updatedAt": "2026-10-27T16:31:23.457Z"
+  },
+  {
+    "_id": "gen_1793118602199_gnlt6",
+    "action": "USER_LOGIN",
+    "userId": "usr_student_01",
+    "userName": "Aarav Sharma",
+    "userRole": "STUDENT",
+    "details": "User logged in successfully as STUDENT",
+    "ip": "127.0.0.1",
+    "timestamp": "2026-10-27T16:30:02.197Z",
+    "createdAt": "2026-10-27T16:30:02.199Z",
+    "updatedAt": "2026-10-27T16:30:02.199Z"
+  },
+  {
+    "_id": "gen_1793117744368_p4lh1",
+    "action": "USER_LOGIN",
+    "userId": "usr_officer_01",
+    "userName": "Dr. Rajesh Verma",
+    "userRole": "OFFICER",
+    "details": "User logged in successfully as OFFICER",
+    "ip": "127.0.0.1",
+    "timestamp": "2026-10-27T16:15:44.368Z",
+    "createdAt": "2026-10-27T16:15:44.368Z",
+    "updatedAt": "2026-10-27T16:15:44.368Z"
+  },
+  {
+    "_id": "gen_1793117734715_arevx",
+    "action": "USER_LOGIN",
+    "userId": "usr_student_01",
+    "userName": "Aarav Sharma",
+    "userRole": "STUDENT",
+    "details": "User logged in successfully as STUDENT",
+    "ip": "127.0.0.1",
+    "timestamp": "2026-10-27T16:15:34.715Z",
+    "createdAt": "2026-10-27T16:15:34.715Z",
+    "updatedAt": "2026-10-27T16:15:34.715Z"
+  },
+  {
+    "_id": "audit_001",
+    "action": "SYSTEM_SEEDED",
+    "complaintId": "SYSTEM",
+    "userId": "usr_supervisor_01",
+    "userName": "Dr. Arvind Mehra",
+    "userRole": "SUPERVISOR",
+    "details": "System initialized with AICTE prototype seed records for ABC Institute of Technology scenario.",
+    "timestamp": "2026-09-12T16:11:21.487Z"
+  },
+  {
+    "_id": "audit_002",
+    "action": "COMPLAINT_SUBMITTED",
+    "complaintId": "SC-2026-0001",
+    "userId": "usr_student_01",
+    "userName": "Aarav Sharma",
+    "userRole": "STUDENT",
+    "details": "Grievance submitted alleging unauthorized fee demands.",
+    "timestamp": "2026-10-13T16:11:21.487Z"
+  },
+  {
+    "_id": "audit_003",
+    "action": "STATUS_UPDATED",
+    "complaintId": "SC-2026-0001",
+    "userId": "usr_officer_01",
+    "userName": "Dr. Rajesh Verma",
+    "userRole": "OFFICER",
+    "details": "Status transitioned from Initial Review to Under Investigation.",
+    "timestamp": "2026-10-23T16:11:21.487Z"
+  }
+]
