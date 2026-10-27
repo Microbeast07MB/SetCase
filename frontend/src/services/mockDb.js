@@ -360,3 +360,4 @@ export const mockDb = {
   getAuditLogs: () => getStored('auditLogs', initialAuditLogs),
   saveAuditLogs: (data) => setStored('auditLogs', data)
 };
+
